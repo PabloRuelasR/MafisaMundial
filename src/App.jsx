@@ -173,6 +173,11 @@ export default function App() {
       nombre: 'Japón',
       colores: ['#ffffff', '#BC002D', '#ffffff'],
       flag: 'jp'
+    },
+    {
+      nombre: 'Portugal',
+      colores: ['#BC002D', '#0b5c12'],
+      flag: 'jp'
     }
   ];
 
