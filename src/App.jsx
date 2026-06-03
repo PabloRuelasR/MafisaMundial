@@ -38,7 +38,7 @@ const participantesIniciales = [
     id: 4,
     nombre: 'Miguel',
     puntos: 110,
-    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png',
+    img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/59.png',
     predicciones: []
   },
   {
