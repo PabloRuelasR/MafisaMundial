@@ -177,7 +177,7 @@ export default function App() {
     {
       nombre: 'Portugal',
       colores: ['#BC002D', '#0b5c12'],
-      flag: 'jp'
+      flag: 'pt'
     }
   ];
 
