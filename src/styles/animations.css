@@ -1,0 +1,27 @@
+@keyframes stadium-pan {
+  0% { transform: scale(1.08) translate(0%, 0%); }
+  100% { transform: scale(1.12) translate(-2%, 1%); }
+}
+.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-down { animation: fadeInDown .4s ease; }
+@keyframes floatPokemon {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float-pokemon { animation: floatPokemon 3s ease-in-out infinite; }
+@keyframes shootBall {
+  0% { transform: translate(-200px, 250px) scale(0.5) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(120vw, -40vh) scale(1.8) rotate(1080deg); opacity: 0; }
+}
+.shoot-ball {
+  position: absolute; left: 0; bottom: 0; font-size: 5rem;
+  animation: shootBall 1.2s ease-out forwards;
+}
