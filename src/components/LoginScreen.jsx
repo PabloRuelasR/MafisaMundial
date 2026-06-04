@@ -27,9 +27,9 @@ const POKEMONES = [
         img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png'
     },
     {
-        id: 3,
-        nombre: 'Venusaur',
-        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png'
+        id: 59,
+        nombre: 'Arcanine',
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/59.png'
     },
     {
         id: 94,
