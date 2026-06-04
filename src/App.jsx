@@ -6,7 +6,7 @@ import {
   doc,
   getDoc,
   collection,
-  getDocs
+  onSnapshot
 } from 'firebase/firestore';
 import { db } from './services/firebase';
 import { paisesMundial } from './data/mockData';
@@ -52,37 +52,61 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+
   useEffect(() => {
-    const cargarParticipantes = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, 'usuarios'));
 
-        const usuarios = snapshot.docs.map((doc) => {
-          const data = doc.data();
+    const unsubscribe = onSnapshot(
+      collection(db, 'usuarios'),
+      (snapshot) => {
 
-          return {
-            id: doc.id,
-            nombre: data.nombre,
-            img: data.img,
-            puntos: data.puntosTotal || 0,
-            predicciones: data.predicciones || [],
-            rol: data.rol || 'user'
-          };
-        });
+        try {
 
-        setParticipantes(usuarios);
+          const usuarios = snapshot.docs.map((doc) => {
 
-      } catch (error) {
-        console.error('Error cargando usuarios:', error);
+            const data = doc.data();
+
+            return {
+              id: doc.id,
+              uid: data.uid,
+              nombre: data.nombre,
+              img: data.img,
+              puntos: data.puntosTotal || 0,
+              rol: data.rol || 'user'
+            };
+          });
+
+          usuarios.sort((a, b) =>
+              b.puntos - a.puntos
+          );
+
+          setParticipantes(usuarios);
+
+        } catch (error) {
+
+          console.error(
+            'Error procesando usuarios:',
+            error
+          );
+        }
+      },
+      (error) => {
+
+        console.error(
+          'Error escuchando usuarios:',
+          error
+        );
       }
-    };
+    );
 
-    cargarParticipantes();
+    return () => unsubscribe();
+
   }, []);
 
-//   useEffect(() => {
-//   seedMatches();
-// }, []);
+
+
+  //   useEffect(() => {
+  //   seedMatches();
+  // }, []);
 
 
   if (authLoading) {
