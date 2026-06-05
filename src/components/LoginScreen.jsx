@@ -58,7 +58,7 @@ const POKEMONES = [
     },
     {
         id: 493,
-        nombre: 'Greninja',
+        nombre: 'Arceus',
         img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/493.png'
     }
 ];

@@ -25,7 +25,7 @@ export default function Header() {
         <div className="inline-flex items-center px-7 py-3 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 shadow-[0_0_30px_rgba(250,204,21,0.45)]">
           <span className="text-xl mr-3">💰</span>
           <span className="font-black uppercase tracking-widest text-slate-950">
-            Pozo Acumulado: S/ 140
+            Pozo Acumulado: S/ 210
           </span>
         </div>
       </div>
