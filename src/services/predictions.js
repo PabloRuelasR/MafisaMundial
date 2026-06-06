@@ -5,33 +5,17 @@ import {
   getDocs,
   setDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
+  orderBy
 } from 'firebase/firestore';
 
 import { db } from './firebase';
 
 // Obtener partidos disponibles para mañana
-export const getTomorrowMatches = async () => {
-
-  const tomorrow = new Date();
-
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const yyyy = tomorrow.getFullYear();
-
-  const mm = String(
-    tomorrow.getMonth() + 1
-  ).padStart(2, '0');
-
-  const dd = String(
-    tomorrow.getDate()
-  ).padStart(2, '0');
-
-  const fechaBusqueda = `${yyyy}-${mm}-${dd}`;
-
+export const getAllMatches = async () => {
   const q = query(
     collection(db, 'partidos'),
-    where('fechaPartido', '==', fechaBusqueda)
+    orderBy('fechaPartido', 'asc')
   );
 
   const snapshot = await getDocs(q);

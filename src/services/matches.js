@@ -1,57 +1,46 @@
-import {
-  collection,
-  addDoc
-} from 'firebase/firestore';
-
+import { collection, doc, setDoc } from 'firebase/firestore'; // <-- Cambiado aquí
 import { db } from './firebase';
+import worldcupData from '../data/worldcup.json';
+
+const flagMap = {
+    "Mexico": "mx", "South Africa": "za", "South Korea": "kr", "Czech Republic": "cz",
+    "Canada": "ca", "Bosnia & Herzegovina": "ba", "Qatar": "qa", "Switzerland": "ch",
+    "Brazil": "br", "Morocco": "ma", "Haiti": "ht", "Scotland": "gb-sct",
+    "USA": "us", "Paraguay": "py", "Australia": "au", "Turkey": "tr",
+    "Germany": "de", "Curaçao": "cw", "Ivory Coast": "ci", "Ecuador": "ec",
+    "Netherlands": "nl", "Japan": "jp", "Sweden": "se", "Tunisia": "tn",
+    "Belgium": "be", "Egypt": "eg", "Iran": "ir", "New Zealand": "nz",
+    "Spain": "es", "Cape Verde": "cv", "Saudi Arabia": "sa", "Uruguay": "uy",
+    "France": "fr", "Senegal": "sn", "Iraq": "iq", "Norway": "no",
+    "Argentina": "ar", "Algeria": "dz", "Austria": "at", "Jordan": "jo",
+    "Portugal": "pt", "DR Congo": "cd", "Uzbekistan": "uz", "Colombia": "co",
+    "England": "gb-eng", "Croatia": "hr", "Ghana": "gh", "Panama": "pa"
+};
 
 export const seedMatches = async () => {
+    const groupMatches = worldcupData.matches.filter(m => m.round.includes("Matchday"));
 
-  const matches = [
-    {
-      fechaPartido: '2026-06-11',
-      horaPartido: '19:00',
+    for (const match of groupMatches) {
+        const matchDoc = {
+            fechaPartido: match.date,
+            horaPartido: match.time,
+            equipo1: match.team1,
+            equipo2: match.team2,
+            flag1: flagMap[match.team1] || "un",
+            flag2: flagMap[match.team2] || "un",
+            marcador1: null,
+            marcador2: null,
+            resultadoOficial: null,
+            estado: 'pendiente',
+            createdAt: Date.now()
+        };
 
-      equipo1: 'México',
-      equipo2: 'Sudáfrica',
+        // Creamos un ID ÚNICO juntando los nombres de los equipos (ej: Mexico_SouthAfrica)
+        const matchId = `${match.team1}_${match.team2}`.replace(/\s+/g, '_');
 
-      flag1: 'mx',
-      flag2: 'za',
-
-      marcador1: null,
-      marcador2: null,
-
-      resultadoOficial: null,
-
-      estado: 'pendiente',
-
-      createdAt: Date.now()
-    },
-
-    {
-      fechaPartido: '2026-06-11',
-      horaPartido: '22:00',
-
-      equipo1: 'Corea del Sur',
-      equipo2: 'República Checa',
-
-      flag1: 'kr',
-      flag2: 'cz',
-
-      marcador1: null,
-      marcador2: null,
-
-      resultadoOficial: null,
-
-      estado: 'pendiente',
-
-      createdAt: Date.now()
+        // Usamos setDoc para que, si el ID ya existe, solo lo actualice y no lo duplique
+        await setDoc(doc(db, 'partidos', matchId), matchDoc);
     }
-  ];
-
-  for (const match of matches) {
-    await addDoc(collection(db, 'partidos'), match);
-  }
-
-  console.log('Partidos creados');
+    
+    console.log('Todos los partidos insertados correctamente (Cero duplicados).');
 };

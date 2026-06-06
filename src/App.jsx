@@ -76,7 +76,7 @@ export default function App() {
           });
 
           usuarios.sort((a, b) =>
-              b.puntos - a.puntos
+            b.puntos - a.puntos
           );
 
           setParticipantes(usuarios);
@@ -189,57 +189,11 @@ export default function App() {
 
       <button
         onClick={() => auth.signOut()}
-        className="absolute top-4 right-4 z-[200] text-sm text-slate-400 hover:text-white"
+        className="absolute top-4 right-4 z-[200] text-xs font-bold text-slate-500 hover:text-red-400 transition-colors uppercase tracking-widest bg-slate-900/50 px-3 py-1.5 rounded-full border border-slate-700/50"
       >
         Cerrar Sesión
       </button>
 
-      <div className="fixed top-4 left-4 z-[200] flex gap-3">
-
-        <button
-          onClick={() => setShowPredictions(true)}
-          className="
-              px-5 py-3 rounded-2xl
-              bg-gradient-to-r from-yellow-500 to-amber-500
-              text-black font-black
-              shadow-[0_0_20px_rgba(250,204,21,0.4)]
-              hover:scale-105 transition-all
-            "
-        >
-          ⚽ Pronósticos
-        </button>
-
-        <button
-          onClick={() => setShowMyPredictions(true)}
-          className="
-            px-5 py-3 rounded-2xl
-            bg-gradient-to-r from-indigo-500 to-purple-600
-            text-white font-black
-            shadow-[0_0_20px_rgba(99,102,241,0.4)]
-            hover:scale-105 transition-all
-          "
-        >
-          📜 Mis Pronósticos
-        </button>
-
-        {
-          currentUser?.rol === 'admin' && (
-            <button
-              onClick={() => setShowAdmin(true)}
-              className="
-          px-5 py-3 rounded-2xl
-          bg-gradient-to-r from-red-500 to-rose-600
-          text-white font-black
-          shadow-[0_0_20px_rgba(239,68,68,0.4)]
-          hover:scale-105 transition-all
-        "
-            >
-              🛠 Auditar
-            </button>
-          )
-        }
-
-      </div>
       {/* BACKGROUND & OVERLAYS */}
       <div
         className="absolute inset-0"
@@ -255,11 +209,37 @@ export default function App() {
       <div className="absolute bottom-[-120px] right-[-120px] w-[420px] h-[420px] bg-indigo-500/10 rounded-full blur-[120px] z-[2]" />
 
       {/* CONTENT */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center px-4 py-8">
+      <div className="relative z-10 min-h-screen flex flex-col items-center px-4 py-8 pb-20">
         <Header />
 
-        {/* BARRAS */}
-        <div ref={scrollRef} className="mt-10 w-full max-w-7xl flex items-end justify-start md:justify-center gap-4 sm:gap-6 overflow-x-auto custom-scrollbar pb-6 px-4 md:px-0" style={{ height: '520px' }}>
+        {/* CONTROLES DE ACCIÓN (Integrados debajo del Header) */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full max-w-3xl z-20">
+          <button
+            onClick={() => setShowPredictions(true)}
+            className="flex-1 sm:flex-none min-w-[140px] px-4 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-sm sm:text-base shadow-[0_0_20px_rgba(250,204,21,0.3)] hover:scale-105 transition-all"
+          >
+            ⚽ Pronósticos
+          </button>
+
+          <button
+            onClick={() => setShowMyPredictions(true)}
+            className="flex-1 sm:flex-none min-w-[140px] px-4 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-black text-sm sm:text-base shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:scale-105 transition-all"
+          >
+            📜 Historial
+          </button>
+
+          {currentUser?.rol === 'admin' && (
+            <button
+              onClick={() => setShowAdmin(true)}
+              className="w-full sm:w-auto px-4 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-gradient-to-r from-red-500 to-rose-600 text-white font-black text-sm sm:text-base shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:scale-105 transition-all"
+            >
+              🛠 Auditar
+            </button>
+          )}
+        </div>
+
+        {/* BARRAS DE PODIUM */}
+        <div ref={scrollRef} className="mt-12 w-full max-w-7xl flex items-end justify-start md:justify-center gap-4 sm:gap-6 overflow-x-auto custom-scrollbar pb-6 px-4 md:px-0" style={{ height: '520px' }}>
           {displayOrder.map((user) => {
             const rank = sorted.findIndex((p) => p.id === user.id);
             return (

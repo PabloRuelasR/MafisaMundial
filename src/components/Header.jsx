@@ -3,14 +3,6 @@ import React from 'react';
 export default function Header() {
   return (
     <div className="text-center w-full max-w-6xl">
-      <div className="flex justify-center mb-4">
-        <div className="inline-flex items-center px-5 py-2 rounded-full border border-yellow-500/30 bg-slate-900/80 backdrop-blur-xl">
-          <span className="w-2.5 h-2.5 bg-yellow-400 rounded-full animate-pulse mr-3" />
-          <span className="text-xs font-bold tracking-[0.25em] uppercase text-yellow-400">
-            Inicia - 11 de Junio
-          </span>
-        </div>
-      </div>
       <div className="flex justify-center items-center gap-3 sm:gap-5">
         <span className="text-3xl sm:text-5xl">⚽</span>
         <h1 className="text-[2rem] sm:text-6xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-500 to-yellow-700">

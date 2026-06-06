@@ -31,23 +31,13 @@ export default function AdminPanel() {
     }, []);
 
     const loadTodayMatches = async () => {
-
         try {
-
-            const today = new Date();
-
-            const yyyy = today.getFullYear();
-
-            const mm = String(
-                today.getMonth() + 1
-            ).padStart(2, '0');
-
-            const dd = String(
-                today.getDate()
-            ).padStart(2, '0');
-
-            const fechaHoy =
-                `${yyyy}-${mm}-${dd}`;
+            // Se asegura de usar la fecha en Perú
+            const date = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Lima" }));
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const fechaHoy = `${yyyy}-${mm}-${dd}`;
 
             const q = query(
                 collection(db, 'partidos'),
@@ -55,22 +45,16 @@ export default function AdminPanel() {
             );
 
             const snapshot = await getDocs(q);
-
             const data = snapshot.docs.map(docSnap => ({
                 id: docSnap.id,
                 ...docSnap.data()
             }));
 
             setMatches(data);
-
         } catch (error) {
-
             console.error(error);
-
         } finally {
-
             setLoading(false);
-
         }
     };
 
@@ -243,40 +227,24 @@ export default function AdminPanel() {
 
                             {/* FOOTER */}
                             <div className="mt-8 flex items-center justify-between">
-
                                 <div>
-
-                                    <div className="text-slate-400 text-sm">
-                                        Hora
-                                    </div>
-
-                                    <div className="font-bold">
-                                        {match.horaPartido}
-                                    </div>
-
+                                    <div className="text-slate-400 text-sm">Hora (Perú)</div>
+                                    <div className="font-bold">{match.horaPartido}</div>
                                 </div>
 
-                                {!auditado && (
-
+                                {/* DISEÑO CON DOS LÍNEAS VERTICALES */}
+                                {auditado ? (
+                                    <div className="border-l-2 border-r-2 border-emerald-500 px-6 py-2 text-emerald-400 font-black uppercase tracking-widest text-sm">
+                                        Auditado
+                                    </div>
+                                ) : (
                                     <button
-                                        onClick={() =>
-                                            handleAudit(match)
-                                        }
+                                        onClick={() => handleAudit(match)}
                                         className="px-6 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-black transition-all"
                                     >
                                         Auditar Partido
                                     </button>
-
                                 )}
-
-                                {auditado && (
-
-                                    <div className="px-5 py-3 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-300 font-bold">
-                                        ✓ Partido auditado
-                                    </div>
-
-                                )}
-
                             </div>
 
                         </div>
