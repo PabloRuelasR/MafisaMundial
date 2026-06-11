@@ -19,6 +19,7 @@ import LoginScreen from './components/LoginScreen';
 import PredictionPanel from './components/PredictionPanel';
 import AdminPanel from './components/AdminPanel';
 import MyPredictionsModal from './components/MyPredictionsModal';
+import GroupPicksModal from './components/GroupPicksModal';
 import './styles/animations.css';
 
 
@@ -34,6 +35,7 @@ export default function App() {
   const [showPredictions, setShowPredictions] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showMyPredictions, setShowMyPredictions] = useState(false);
+  const [showGroupPicks, setShowGroupPicks] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -228,6 +230,13 @@ export default function App() {
             📜 Historial
           </button>
 
+          <button
+            onClick={() => setShowGroupPicks(true)}
+            className="flex-1 sm:flex-none min-w-[140px] px-4 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-105 transition-all"
+          >
+            📊 Fase Grupos
+          </button>
+
           {currentUser?.rol === 'admin' && (
             <button
               onClick={() => setShowAdmin(true)}
@@ -418,6 +427,10 @@ export default function App() {
           />
         )
       }
+
+      {showGroupPicks && (
+        <GroupPicksModal onClose={() => setShowGroupPicks(false)} />
+      )}
     </div>
   );
 }
