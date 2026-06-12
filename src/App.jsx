@@ -252,7 +252,7 @@ export default function App() {
           </div>
 
           {/* TARJETA UNIFICADA (Puntos + Controles) */}
-          <div className="w-full bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
+          <div className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
             
             {/* Puntos de Usuario */}
             <div className="flex items-center gap-3 px-5 py-2 bg-black/30 rounded-xl border border-white/5 w-full sm:w-auto justify-center">
