@@ -315,10 +315,6 @@ export default function App() {
               );
             })}
           </div>
-
-          <div className="shrink-0 w-full px-2 z-0">
-            <Platform />
-          </div>
         </div>
 
         {/* === SECCIÓN INFERIOR: TICKER NOTICIAS (Siempre pegado abajo) === */}
