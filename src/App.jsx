@@ -97,7 +97,6 @@ export default function App() {
   }, [currentUser?.uid]);
 
   useEffect(() => {
-    // Diccionario de traducción
     const traducciones = {
       "Mexico": "México", "South Africa": "Sudáfrica", "South Korea": "Corea del Sur", 
       "Czech Republic": "República Checa", "Canada": "Canadá", "Bosnia & Herzegovina": "Bosnia y Herzegovina",
@@ -132,7 +131,6 @@ export default function App() {
           return (b.fechaPartido || '').localeCompare(a.fechaPartido || '');
         });
         
-        // Tomamos ÚNICAMENTE el último partido
         const lastMatch = finalizados[0];
         const eq1 = traducir(lastMatch.equipo1);
         const eq2 = traducir(lastMatch.equipo2);
@@ -209,9 +207,9 @@ export default function App() {
   const maxPuntos = sorted[0]?.puntos || 1;
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#020617] text-white selection:bg-cyan-500 flex flex-col">
+    <div className="relative min-h-[100dvh] sm:h-[100dvh] w-full overflow-x-hidden overflow-y-auto sm:overflow-hidden bg-[#020617] text-white selection:bg-cyan-500 flex flex-col">
       
-      {/* ANIMACIÓN DEL CARRUSEL (Velocidad ajustada) */}
+      {/* ANIMACIÓN DEL CARRUSEL (Velocidad suave 38s) */}
       <style>{`
         @keyframes ticker-slide {
           0% { transform: translate3d(0, 0, 0); }
@@ -226,12 +224,12 @@ export default function App() {
       <div className="absolute inset-0 bg-[#020617]/75 z-[1] pointer-events-none" />
       <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] z-[2] animate-pulse pointer-events-none" />
 
-      {/* TOP NAVBAR (Usuario y Salir) - Modificado para mayor tamaño */}
+      {/* TOP NAVBAR (Usuario y Salir) - Estructura limpia y textos proporcionales */}
       <div className="absolute top-0 w-full h-16 px-4 sm:px-6 flex justify-between items-center z-[200]">
         <div className="flex items-center gap-3 pointer-events-auto">
-          <img src={currentUser.img || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'} alt="Avatar" className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-slate-700 shadow-[0_0_15px_rgba(255,255,255,0.1)] object-cover" />
-          <div className="hidden sm:block leading-tight mt-1">
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">Bienvenido,</p>
+          <img src={currentUser.img || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'} alt="Avatar" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 border-slate-700 shadow-[0_0_15px_rgba(255,255,255,0.1)] object-cover" />
+          <div className="leading-tight mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Bienvenido,</p>
             <p className="text-sm sm:text-base font-bold text-white tracking-wide">{currentUser.nombre}</p>
           </div>
         </div>
@@ -240,15 +238,15 @@ export default function App() {
         </button>
       </div>
 
-      {/* CONTENEDOR PRINCIPAL FLUIDO */}
-      <div className="relative z-10 flex-1 flex flex-col w-full h-full pt-16 sm:pt-20 pb-0">
+      {/* CONTENEDOR PRINCIPAL */}
+      <div className="relative z-10 flex-1 flex flex-col w-full pt-16 sm:pt-20 pb-0 min-h-0">
         
         {/* === SECCIÓN SUPERIOR: TÍTULO, PUNTOS Y BOTONES === */}
-        <div className="shrink-0 w-full max-w-3xl mx-auto px-4 flex flex-col items-center gap-1 sm:gap-2 relative z-20">
+        <div className="shrink-0 w-full max-w-3xl mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
           
-          {/* HEADER LIMITADO - items-start y origin-top son la clave para no solapar */}
-          <div className="w-full flex justify-center items-start h-[115px] sm:h-[150px] pointer-events-none">
-            <div className="transform scale-[0.60] sm:scale-75 origin-top">
+          {/* HEADER CON ALTO CONTROLADO Y ANCLAJE SUPERIOR */}
+          <div className="w-full flex justify-center items-start h-[110px] sm:h-[145px] pointer-events-none overflow-visible">
+            <div className="transform scale-[0.58] sm:scale-75 origin-top">
               <Header />
             </div>
           </div>
@@ -291,8 +289,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* === SECCIÓN CENTRAL: PODIO Y PLATAFORMA (Espacio principal) === */}
-        <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-end mt-2 sm:mt-4 relative min-h-0 z-10">
+        {/* === SECCIÓN CENTRAL: PODIO Y PLATAFORMA (Crece de forma flexible) === */}
+        <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-end mt-4 sm:mt-6 relative min-h-[340px] sm:min-h-0 z-10">
           
           <div className="shrink-0 flex flex-col items-center mb-1">
             <h2 className="text-xs sm:text-sm font-black text-slate-300 tracking-[0.2em] uppercase flex items-center gap-3">
@@ -323,8 +321,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* === SECCIÓN INFERIOR: TICKER NOTICIAS === */}
-        <div className="shrink-0 w-full h-10 sm:h-12 bg-slate-950/90 border-t border-slate-800 flex items-center overflow-hidden z-[100] shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+        {/* === SECCIÓN INFERIOR: TICKER NOTICIAS (Siempre pegado abajo) === */}
+        <div className="shrink-0 w-full h-10 sm:h-12 bg-slate-950/90 border-t border-slate-800 flex items-center overflow-hidden z-[100] shadow-[0_-10px_20px_rgba(0,0,0,0.5)] mt-auto">
           <div className="w-max flex items-center whitespace-nowrap animate-ticker pl-4">
             {tickerItems.map((item) => (
               <div key={item.uniqueKey} className="inline-flex items-center mx-6 sm:mx-10 text-[10px] sm:text-xs font-medium tracking-wide">
