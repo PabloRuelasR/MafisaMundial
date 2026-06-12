@@ -45,17 +45,28 @@ export default function PredictionPanel({ currentUser }) {
             setDates(sortedDates);
 
             // Seleccionar por defecto la fecha de hoy o la más próxima disponible
-            const nextDate = sortedDates.find(d => d >= todayPeru) || sortedDates[sortedDates.length - 1] || '';
-            setActiveDate(nextDate);
+            setActiveDate(prevDate => {
+                // 1. Si ya estamos en una fecha válida, nos quedamos ahí (evita saltos al guardar)
+                if (prevDate && sortedDates.includes(prevDate)) return prevDate;
+                
+                // 2. Si venimos de abrir el modal, leemos de la memoria del navegador
+                const savedDate = localStorage.getItem('activePredictionDate');
+                if (savedDate && sortedDates.includes(savedDate)) return savedDate;
+                
+                // 3. Por defecto: hoy o el próximo disponible
+                return sortedDates.find(d => d >= todayPeru) || sortedDates[sortedDates.length - 1] || '';
+            });
             setPredictions(predictionsData);
 
             // Llenar scores actuales para edición
-            const initialScores = {};
-            predictionsData.forEach(p => {
-                initialScores[`${p.partidoId}_1`] = p.score1;
-                initialScores[`${p.partidoId}_2`] = p.score2;
+            setScores(prevScores => {
+                const updatedScores = { ...prevScores };
+                predictionsData.forEach(p => {
+                    updatedScores[`${p.partidoId}_1`] = p.score1;
+                    updatedScores[`${p.partidoId}_2`] = p.score2;
+                });
+                return updatedScores;
             });
-            setScores(initialScores);
 
         } catch (error) {
             console.error(error);
@@ -137,7 +148,10 @@ export default function PredictionPanel({ currentUser }) {
                         return (
                             <button
                                 key={date}
-                                onClick={() => setActiveDate(date)}
+                                onClick={() => {
+                                    setActiveDate(date);
+                                    localStorage.setItem('activePredictionDate', date);
+                                }}
                                 className={`px-6 py-4 rounded-2xl font-black whitespace-nowrap transition-all ${isActive
                                         ? 'bg-yellow-500 text-black shadow-[0_0_20px_rgba(250,204,21,0.3)]'
                                         : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
