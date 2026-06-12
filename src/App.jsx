@@ -245,7 +245,7 @@ export default function App() {
         <div className="shrink-0 w-full mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
           
           {/* HEADER CON ALTO CONTROLADO Y ANCLAJE SUPERIOR */}
-          <div className="w-full flex justify-center items-start h-[110px] sm:h-[145px] pointer-events-none overflow-visible">
+          <div className="w-full flex justify-center items-start pointer-events-none overflow-visible">
             <div className="transform scale-[0.58] sm:scale-75 origin-top">
               <Header />
             </div>
