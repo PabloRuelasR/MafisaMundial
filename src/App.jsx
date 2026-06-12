@@ -300,7 +300,7 @@ export default function App() {
             </h2>
           </div>
 
-          <div className="flex-1 w-full flex items-end justify-start md:justify-center gap-2 sm:gap-6 overflow-x-auto overflow-y-hidden custom-scrollbar px-2 pb-0 sm:pb-2">
+          <div className="flex-1 w-full flex items-end justify-start md:justify-center gap-2 sm:gap-6 overflow-x-auto overflow-y-hidden custom-scrollbar px-2 pb-0">
             {displayOrder.map((user) => {
               const rank = sorted.findIndex((p) => p.id === user.id);
               return (
