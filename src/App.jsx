@@ -244,10 +244,7 @@ export default function App() {
         {/* === SECCIÓN SUPERIOR: TÍTULO, PUNTOS Y BOTONES === */}
         <div className="shrink-0 w-full mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
           
-          {/* HEADER CON ALTO CONTROLADO Y ANCLAJE SUPERIOR */}
-            <div className="transform scale-[0.58] sm:scale-75 origin-top">
               <Header />
-            </div>
 
           {/* TARJETA UNIFICADA (Puntos + Controles) */}
           <div className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
