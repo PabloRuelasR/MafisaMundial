@@ -8,7 +8,7 @@ export default function PodiumItem({ user, rank, maxPuntos, mounted, onClick }) 
 
   // SOLUCIÓN RESPONSIVE: Usamos 'vh' (Viewport Height) en lugar de píxeles fijos.
   // Esto hace que la barra ocupe un porcentaje de la pantalla disponible.
-  const MAX_BAR_VH = 35;  // 35% de la altura de la pantalla
+  const MAX_BAR_VH = 30;  // 35% de la altura de la pantalla
   const MIN_BAR_VH = 5;   // 5% de la altura de la pantalla
   const ratio = maxPuntos > 0 ? user.puntos / maxPuntos : 0;
   

@@ -242,7 +242,7 @@ export default function App() {
       <div className="relative z-10 flex-1 flex flex-col w-full pt-16 sm:pt-20 pb-0 min-h-0">
         
         {/* === SECCIÓN SUPERIOR: TÍTULO, PUNTOS Y BOTONES === */}
-        <div className="shrink-0 w-full max-w-3xl mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
+        <div className="shrink-0 w-full mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
           
           {/* HEADER CON ALTO CONTROLADO Y ANCLAJE SUPERIOR */}
           <div className="w-full flex justify-center items-start h-[110px] sm:h-[145px] pointer-events-none overflow-visible">
