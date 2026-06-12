@@ -6,11 +6,14 @@ export default function PodiumItem({ user, rank, maxPuntos, mounted, onClick }) 
   const isSecond = rank === 1;
   const isThird = rank === 2;
 
-  // Alturas ajustadas para la nueva vista sin scroll
-  const MAX_BAR_HEIGHT = 230; 
-  const MIN_BAR_HEIGHT = 15;
+  // SOLUCIÓN RESPONSIVE: Usamos 'vh' (Viewport Height) en lugar de píxeles fijos.
+  // Esto hace que la barra ocupe un porcentaje de la pantalla disponible.
+  const MAX_BAR_VH = 35;  // 35% de la altura de la pantalla
+  const MIN_BAR_VH = 5;   // 5% de la altura de la pantalla
   const ratio = maxPuntos > 0 ? user.puntos / maxPuntos : 0;
-  const dynamicHeight = MIN_BAR_HEIGHT + ratio * (MAX_BAR_HEIGHT - MIN_BAR_HEIGHT);
+  
+  // La altura dinámica ahora se calcula en unidades 'vh'
+  const dynamicHeight = MIN_BAR_VH + ratio * (MAX_BAR_VH - MIN_BAR_VH);
   const finalHeight = mounted ? dynamicHeight : 0;
 
   // Estilos por defecto (resto de posiciones)
@@ -42,64 +45,55 @@ export default function PodiumItem({ user, rank, maxPuntos, mounted, onClick }) 
       className="relative flex flex-col items-center shrink-0 cursor-pointer group"
     >
       {/* SECCIÓN DEL AVATAR Y TARJETA */}
-      <div className={`relative z-20 flex flex-col items-center transition-all duration-300 group-hover:-translate-y-4 ${isFirst ? 'mb-4' : 'mb-2'}`}>
+      <div className={`relative z-20 flex flex-col items-center transition-all duration-300 group-hover:-translate-y-2 sm:group-hover:-translate-y-4 ${isFirst ? 'mb-2 sm:mb-4' : 'mb-1 sm:mb-2'}`}>
         
-        {/* CORONA DEL 1ER LUGAR */}
+        {/* CORONA DEL 1ER LUGAR (Ajustada para móviles) */}
         {isFirst && (
-          <div className="absolute -top-10 text-4xl sm:text-5xl animate-bounce z-30 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]">
+          <div className="absolute -top-7 sm:-top-10 text-3xl sm:text-5xl animate-bounce z-30 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]">
             👑
           </div>
         )}
 
-        {/* CONTENEDOR FOTO DE PERFIL */}
-        <div className={`relative rounded-full overflow-hidden border-[3px] bg-slate-900 transition-all duration-300 group-hover:scale-110 ${isFirst ? 'w-20 h-20 sm:w-24 sm:h-24 z-20' : 'w-16 h-16 sm:w-20 sm:h-20 z-10'} ${borderAvatar}`}>
+        {/* CONTENEDOR FOTO DE PERFIL (Escalado en 3 tamaños: movil, tablet, PC) */}
+        <div className={`relative rounded-full overflow-hidden border-[3px] bg-slate-900 transition-all duration-300 group-hover:scale-110 ${isFirst ? 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 z-20' : 'w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 z-10'} ${borderAvatar}`}>
           <img
             src={user.img}
             alt={user.nombre}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
-          {/* Sombra interna para darle profundidad al borde */}
           <div className="absolute inset-0 shadow-[inset_0_0_15px_rgba(0,0,0,0.8)] pointer-events-none rounded-full" />
         </div>
 
         {/* ETIQUETA COMPACTA: NOMBRE Y PUNTOS */}
-        <div className="relative -mt-4 z-30 bg-[#081226]/90 backdrop-blur-md border border-slate-600/50 rounded-xl px-2.5 py-1.5 sm:px-3 sm:py-2 text-center shadow-[0_10px_20px_rgba(0,0,0,0.6)] min-w-[85px] sm:min-w-[110px] group-hover:border-slate-400/80 transition-colors">
+        <div className="relative -mt-3 sm:-mt-4 z-30 bg-[#081226]/90 backdrop-blur-md border border-slate-600/50 rounded-xl px-2 py-1 sm:px-3 sm:py-2 text-center shadow-[0_10px_20px_rgba(0,0,0,0.6)] min-w-[70px] sm:min-w-[110px] group-hover:border-slate-400/80 transition-colors">
+          
           {/* Insignia de Posición */}
-          <div className={`absolute -top-2.5 -right-2.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-black shadow-lg border ${badgeColor}`}>
+          <div className={`absolute -top-2 -right-2 sm:-top-2.5 sm:-right-2.5 w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[9px] sm:text-xs font-black shadow-lg border ${badgeColor}`}>
             {badge}
           </div>
           
-          <div className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-200 truncate max-w-[70px] sm:max-w-[90px] mx-auto">
+          <div className="text-[8px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-200 truncate max-w-[55px] sm:max-w-[90px] mx-auto">
             {user.nombre}
           </div>
           
           <div className="flex items-baseline justify-center gap-0.5 mt-0.5">
-            <span className="text-sm sm:text-lg font-black leading-none text-white drop-shadow-md">
+            <span className="text-xs sm:text-lg font-black leading-none text-white drop-shadow-md">
               <AnimatedCounter value={user.puntos} />
             </span>
-            <span className="text-[7px] sm:text-[9px] font-bold text-slate-400">PTS</span>
+            <span className="text-[6px] sm:text-[9px] font-bold text-slate-400">PTS</span>
           </div>
         </div>
       </div>
 
-      {/* BARRA DEL PODIO (Pilar) */}
+      {/* BARRA DEL PODIO RESPONSIVE */}
       <div
-        className={`relative overflow-hidden rounded-t-[16px] sm:rounded-t-[24px] border-t-[3px] border-l border-r border-opacity-50 transition-all duration-[1500ms] cubic-bezier(0.4,0,0.2,1) group-hover:brightness-125 w-[75px] sm:w-[110px] ${barGradient}`}
-        style={{ height: `${finalHeight}px` }}
+        className={`relative overflow-hidden rounded-t-[12px] sm:rounded-t-[24px] border-t-[3px] border-l border-r border-opacity-50 transition-all duration-[1500ms] cubic-bezier(0.4,0,0.2,1) group-hover:brightness-125 w-[55px] sm:w-[85px] md:w-[110px] ${barGradient}`}
+        style={{ height: `${finalHeight}vh` }} /* Ahora usa VH (Viewport Height) */
       >
-        {/* Textura interna (Fibra de carbono o cuadrícula) */}
         <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-        
-        {/* Reflejo de luz superior (Efecto Cristal) */}
         <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/30 to-transparent" />
-        
-        {/* Sombra base profunda en la parte inferior */}
         <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent" />
-        
-        {/* Resplandor central al pasar el cursor */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-transparent via-white/10 to-white/20" />
-        
-        {/* Líneas de luz laterales (estilo LED) */}
         <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-white/40 to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-white/40 to-transparent" />
       </div>
