@@ -8,7 +8,7 @@ export default function PodiumItem({ user, rank, maxPuntos, mounted, onClick }) 
 
   // SOLUCIÓN RESPONSIVE: Usamos 'vh' (Viewport Height) en lugar de píxeles fijos.
   // Esto hace que la barra ocupe un porcentaje de la pantalla disponible.
-  const MAX_BAR_VH = 30;  // 35% de la altura de la pantalla
+  const MAX_BAR_VH = 35;  // 35% de la altura de la pantalla
   const MIN_BAR_VH = 5;   // 5% de la altura de la pantalla
   const ratio = maxPuntos > 0 ? user.puntos / maxPuntos : 0;
   
@@ -55,13 +55,64 @@ export default function PodiumItem({ user, rank, maxPuntos, mounted, onClick }) 
         )}
 
         {/* CONTENEDOR FOTO DE PERFIL (Escalado en 3 tamaños: movil, tablet, PC) */}
-        <div className={`relative rounded-full overflow-hidden border-[3px] bg-slate-900 transition-all duration-300 group-hover:scale-110 ${isFirst ? 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 z-20' : 'w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 z-10'} ${borderAvatar}`}>
-          <img
-            src={user.img}
-            alt={user.nombre}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 shadow-[inset_0_0_15px_rgba(0,0,0,0.8)] pointer-events-none rounded-full" />
+        <div className={`relative flex items-center justify-center transition-all duration-300 group-hover:scale-110 rounded-full ${isFirst ? 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 z-20' : 'w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 z-10'}`}>
+          
+          {/* EFECTO DE RAYOS SUTILES PARA EL 1ER LUGAR */}
+          {isFirst && (
+            <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+              <style>
+                {`
+                  @keyframes spin-slow-1 {
+                    0% { transform: rotate(0deg) scale(1); }
+                    50% { transform: rotate(180deg) scale(1.02); }
+                    100% { transform: rotate(360deg) scale(1); }
+                  }
+                  @keyframes spin-slow-2 {
+                    0% { transform: rotate(360deg) scale(1); }
+                    50% { transform: rotate(180deg) scale(0.98); }
+                    100% { transform: rotate(0deg) scale(1); }
+                  }
+                  @keyframes subtle-flicker {
+                    0%, 100% { opacity: 0.85; }
+                    50% { opacity: 0.3; }
+                  }
+                  .rayo-sutil-1 {
+                    animation: spin-slow-1 3.5s linear infinite, subtle-flicker 2s ease-in-out infinite;
+                    transform-origin: center;
+                  }
+                  .rayo-sutil-2 {
+                    animation: spin-slow-2 2.8s linear infinite, subtle-flicker 1.5s ease-in-out infinite reverse;
+                    transform-origin: center;
+                  }
+                `}
+              </style>
+
+              {/* Sombra base sutil */}
+              <div className="absolute inset-[-6px] sm:inset-[-8px] rounded-full bg-yellow-400/10 blur-md animate-pulse"></div>
+
+              {/* SVG de rayos contenidos y delgados */}
+              <svg className="absolute w-[125%] h-[125%] sm:w-[130%] sm:h-[130%]" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 2px rgba(250,204,21,0.6))' }}>
+                
+                
+                {/* Rayo secundario claro (líneas discontinuas sutiles para efecto de chispas) */}
+                <path
+                  className="rayo-sutil-2"
+                  d="M 50 8 L 58 10 L 68 12 L 76 18 L 84 26 L 88 36 L 90 46 L 92 50 L 90 60 L 84 72 L 76 80 L 64 88 L 50 92 L 36 88 L 26 80 L 16 70 L 12 56 L 10 50 L 12 40 L 16 28 L 26 18 L 38 10 Z"
+                  fill="none" stroke="#fef08a" strokeWidth="0.6" strokeDasharray="8 6 3 10" strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          )}
+
+          {/* Círculo interno con la imagen (Se mantiene limpio) */}
+          <div className={`relative w-full h-full rounded-full overflow-hidden bg-slate-900 z-20 ${isFirst ? 'border border-yellow-400/80 shadow-[0_0_10px_rgba(250,204,21,0.3)]' : 'border-[3px] ' + borderAvatar}`}>
+            <img
+              src={user.img}
+              alt={user.nombre}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 shadow-[inset_0_0_15px_rgba(0,0,0,0.8)] pointer-events-none rounded-full" />
+          </div>
         </div>
 
         {/* ETIQUETA COMPACTA: NOMBRE Y PUNTOS */}

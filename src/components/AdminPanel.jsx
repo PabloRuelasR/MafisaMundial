@@ -60,55 +60,32 @@ export default function AdminPanel() {
 
     const handleAudit = async (match) => {
 
-        const score1 =
-            Number(scores[`${match.id}_1`]);
+        const score1 = Number(scores[`${match.id}_1`]);
+        const score2 = Number(scores[`${match.id}_2`]);
 
-        const score2 =
-            Number(scores[`${match.id}_2`]);
-
-        if (
-            isNaN(score1) ||
-            isNaN(score2)
-        ) {
+        if (isNaN(score1) || isNaN(score2)) {
             alert('Ingresa ambos scores');
             return;
         }
 
         try {
+            await auditMatch(match.id, score1, score2);
 
-            // Actualizar partido
             await updateDoc(
                 doc(db, 'partidos', match.id),
                 {
                     marcador1: score1,
                     marcador2: score2,
-
-                    resultadoOficial:
-                        score1 > score2
-                            ? 'LOCAL'
-                            : score1 < score2
-                                ? 'VISITA'
-                                : 'EMPATE',
-
+                    resultadoOficial: score1 > score2 ? 'LOCAL' : score1 < score2 ? 'VISITA' : 'EMPATE',
                     estado: 'finalizado'
                 }
             );
 
-            // Auditar
-            await auditMatch(
-                match.id,
-                score1,
-                score2
-            );
-
             alert('Partido auditado');
-
             await loadTodayMatches();
 
         } catch (error) {
-
             console.error(error);
-
             alert('Error auditando');
         }
     };

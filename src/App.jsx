@@ -23,6 +23,7 @@ import AdminPanel from './components/AdminPanel';
 import MyPredictionsModal from './components/MyPredictionsModal';
 import GroupPicksModal from './components/GroupPicksModal';
 import './styles/animations.css';
+import TodayPredictionsModal from './components/TodayPredictionsModal';
 
 export default function App() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -36,7 +37,7 @@ export default function App() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showMyPredictions, setShowMyPredictions] = useState(false);
   const [showGroupPicks, setShowGroupPicks] = useState(false);
-  
+  const [showTodayPicks, setShowTodayPicks] = useState(false);
   const [tickerItems, setTickerItems] = useState([]);
   const participantesRef = useRef(participantes);
 
@@ -78,7 +79,7 @@ export default function App() {
 
           usuarios.sort((a, b) => b.puntos - a.puntos);
           setParticipantes(usuarios);
-          
+
           if (currentUser) {
             const currentInRank = usuarios.find(u => u.uid === currentUser.uid);
             if (currentInRank && currentInRank.puntos !== currentUser.puntosTotal) {
@@ -98,29 +99,29 @@ export default function App() {
 
   useEffect(() => {
     const traducciones = {
-      "Mexico": "México", "South Africa": "Sudáfrica", "South Korea": "Corea del Sur", 
+      "Mexico": "México", "South Africa": "Sudáfrica", "South Korea": "Corea del Sur",
       "Czech Republic": "República Checa", "Canada": "Canadá", "Bosnia & Herzegovina": "Bosnia y Herzegovina",
-      "Qatar": "Catar", "Switzerland": "Suiza", "Brazil": "Brasil", "Morocco": "Marruecos", 
-      "Haiti": "Haití", "Scotland": "Escocia", "USA": "EE. UU.", "Paraguay": "Paraguay", 
-      "Australia": "Australia", "Turkey": "Turquía", "Germany": "Alemania", "Curaçao": "Curazao", 
-      "Ivory Coast": "Costa de Marfil", "Ecuador": "Ecuador", "Netherlands": "Países Bajos", 
-      "Japan": "Japón", "Sweden": "Suecia", "Tunisia": "Túnez", "Belgium": "Bélgica", 
-      "Egypt": "Egipto", "Iran": "Irán", "New Zealand": "Nueva Zelanda", "Spain": "España", 
-      "Cape Verde": "Cabo Verde", "Saudi Arabia": "Arabia Saudita", "Uruguay": "Uruguay", 
-      "France": "Francia", "Senegal": "Senegal", "Iraq": "Irak", "Norway": "Noruega", 
-      "Argentina": "Argentina", "Algeria": "Argelia", "Austria": "Austria", "Jordan": "Jordania", 
-      "Portugal": "Portugal", "DR Congo": "R. D. del Congo", "Uzbekistan": "Uzbekistán", 
+      "Qatar": "Catar", "Switzerland": "Suiza", "Brazil": "Brasil", "Morocco": "Marruecos",
+      "Haiti": "Haití", "Scotland": "Escocia", "USA": "EE. UU.", "Paraguay": "Paraguay",
+      "Australia": "Australia", "Turkey": "Turquía", "Germany": "Alemania", "Curaçao": "Curazao",
+      "Ivory Coast": "Costa de Marfil", "Ecuador": "Ecuador", "Netherlands": "Países Bajos",
+      "Japan": "Japón", "Sweden": "Suecia", "Tunisia": "Túnez", "Belgium": "Bélgica",
+      "Egypt": "Egipto", "Iran": "Irán", "New Zealand": "Nueva Zelanda", "Spain": "España",
+      "Cape Verde": "Cabo Verde", "Saudi Arabia": "Arabia Saudita", "Uruguay": "Uruguay",
+      "France": "Francia", "Senegal": "Senegal", "Iraq": "Irak", "Norway": "Noruega",
+      "Argentina": "Argentina", "Algeria": "Argelia", "Austria": "Austria", "Jordan": "Jordania",
+      "Portugal": "Portugal", "DR Congo": "R. D. del Congo", "Uzbekistan": "Uzbekistán",
       "Colombia": "Colombia", "England": "Inglaterra", "Croatia": "Croacia", "Ghana": "Ghana", "Panama": "Panamá"
     };
 
     const traducir = (nombre) => traducciones[nombre] || nombre;
 
     const qPartidos = query(collection(db, 'partidos'), where('estado', '==', 'finalizado'));
-    
+
     const unsubscribe = onSnapshot(qPartidos, async (snapshot) => {
       if (snapshot.empty) {
         const emptyMsg = [{ id: 'sys1', jugador: 'SISTEMA', puntos: 0, msg: 'Aún no hay partidos auditados.' }];
-        setTickerItems([...emptyMsg, ...emptyMsg, ...emptyMsg]); 
+        setTickerItems([...emptyMsg, ...emptyMsg, ...emptyMsg]);
         return;
       }
 
@@ -130,7 +131,7 @@ export default function App() {
           if (a.fechaPartido === b.fechaPartido) return (b.horaPartido || '').localeCompare(a.horaPartido || '');
           return (b.fechaPartido || '').localeCompare(a.fechaPartido || '');
         });
-        
+
         const lastMatch = finalizados[0];
         const eq1 = traducir(lastMatch.equipo1);
         const eq2 = traducir(lastMatch.equipo2);
@@ -143,21 +144,21 @@ export default function App() {
           const p = docSnap.data();
           const user = participantesRef.current.find(u => u.uid === p.uid);
           const nombre = user ? user.nombre : 'Jugador';
-          
+
           let msg = '';
           if (p.puntosTotales === 4) {
-             msg = `clavó el marcador exacto (${lastMatch.marcador1}-${lastMatch.marcador2}) en el ${eq1} vs ${eq2} y sumó +4 pts`;
+            msg = `clavó el marcador exacto (${lastMatch.marcador1}-${lastMatch.marcador2}) en el ${eq1} vs ${eq2} y sumó +4 pts`;
           } else if (p.puntosTotales > 0) {
-             msg = `acertó la tendencia del ${eq1} vs ${eq2} y sumó +${p.puntosTotales} pts`;
+            msg = `acertó la tendencia del ${eq1} vs ${eq2} y sumó +${p.puntosTotales} pts`;
           } else {
-             msg = `no sumó puntos en el ${eq1} vs ${eq2} (0 pts)`;
+            msg = `no sumó puntos en el ${eq1} vs ${eq2} (0 pts)`;
           }
 
           items.push({ id: docSnap.id, jugador: nombre, puntos: p.puntosTotales, msg });
         });
 
-        const displayItems = items.length > 0 
-          ? items.sort((a, b) => b.puntos - a.puntos) 
+        const displayItems = items.length > 0
+          ? items.sort((a, b) => b.puntos - a.puntos)
           : [{ id: 'nobody', jugador: 'SISTEMA', puntos: 0, msg: `Nadie sumó puntos en el ${eq1} vs ${eq2}.` }];
 
         const repeated = [];
@@ -208,7 +209,7 @@ export default function App() {
 
   return (
     <div className="relative min-h-[100dvh] sm:h-[100dvh] w-full overflow-x-hidden overflow-y-auto sm:overflow-hidden bg-[#020617] text-white selection:bg-cyan-500 flex flex-col">
-      
+
       {/* ANIMACIÓN DEL CARRUSEL (Velocidad suave 38s) */}
       <style>{`
         @keyframes ticker-slide {
@@ -240,15 +241,15 @@ export default function App() {
 
       {/* CONTENEDOR PRINCIPAL */}
       <div className="relative z-10 flex-1 flex flex-col w-full pt-16 sm:pt-20 pb-0 min-h-0">
-        
+
         {/* === SECCIÓN SUPERIOR: TÍTULO, PUNTOS Y BOTONES === */}
         <div className="shrink-0 w-full mx-auto px-4 flex flex-col items-center gap-2 relative z-20">
-          
-              <Header />
+
+          <Header />
 
           {/* TARJETA UNIFICADA (Puntos + Controles) */}
           <div className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
-            
+
             {/* Puntos de Usuario */}
             <div className="flex items-center gap-3 px-5 py-2 bg-black/30 rounded-xl border border-white/5 w-full sm:w-auto justify-center">
               <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Tus Puntos</span>
@@ -263,7 +264,7 @@ export default function App() {
                 <span className="text-base group-hover:scale-110 transition-transform">⚽</span>
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Pronósticos</span>
               </button>
-              
+
               <button onClick={() => setShowMyPredictions(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-indigo-600 hover:to-purple-600 border border-slate-700 hover:border-indigo-400 flex flex-col items-center justify-center transition-all group">
                 <span className="text-base group-hover:scale-110 transition-transform">📜</span>
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Historial</span>
@@ -275,10 +276,17 @@ export default function App() {
               </button>
 
               {currentUser?.rol === 'admin' && (
-                <button onClick={() => setShowAdmin(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-red-950/40 border border-red-900/30 hover:bg-red-900 flex flex-col items-center justify-center transition-all group">
-                  <span className="text-base group-hover:scale-110 transition-transform">🛠</span>
-                  <span className="text-[8px] sm:text-[9px] font-bold text-red-400 uppercase tracking-wider mt-0.5">Auditar</span>
-                </button>
+
+                <>
+                  <button onClick={() => setShowTodayPicks(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-orange-600 hover:to-red-600 border border-slate-700 hover:border-orange-400 flex flex-col items-center justify-center transition-all group">
+                    <span className="text-base group-hover:scale-110 transition-transform">🎯</span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Hoy</span>
+                  </button>
+                  <button onClick={() => setShowAdmin(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-red-950/40 border border-red-900/30 hover:bg-red-900 flex flex-col items-center justify-center transition-all group">
+                    <span className="text-base group-hover:scale-110 transition-transform">🛠</span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-red-400 uppercase tracking-wider mt-0.5">Auditar</span>
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -286,7 +294,7 @@ export default function App() {
 
         {/* === SECCIÓN CENTRAL: PODIO Y PLATAFORMA (Crece de forma flexible) === */}
         <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-end mt-4 sm:mt-6 relative min-h-[340px] sm:min-h-0 z-10">
-          
+
           <div className="shrink-0 flex flex-col items-center mb-1">
             <h2 className="text-xs sm:text-sm font-black text-slate-300 tracking-[0.2em] uppercase flex items-center gap-3">
               <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-slate-500"></span>
@@ -359,6 +367,7 @@ export default function App() {
       {showAdmin && (<div className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4" onClick={() => setShowAdmin(false)}><div className="w-full max-w-7xl max-h-[95dvh] overflow-y-auto rounded-3xl border border-slate-700 bg-[#081226] p-4 sm:p-8 custom-scrollbar" onClick={(e) => e.stopPropagation()}><div className="flex items-center justify-between mb-6 sm:mb-8"><div><h2 className="text-2xl sm:text-4xl font-black">Panel Admin</h2><p className="text-slate-400 mt-1 text-xs sm:text-sm">Auditoría oficial de marcadores</p></div><button onClick={() => setShowAdmin(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-xl flex items-center justify-center">×</button></div><AdminPanel /></div></div>)}
       {showMyPredictions && <MyPredictionsModal currentUser={currentUser} onClose={() => setShowMyPredictions(false)} />}
       {showGroupPicks && <GroupPicksModal onClose={() => setShowGroupPicks(false)} />}
+      {showTodayPicks && <TodayPredictionsModal onClose={() => setShowTodayPicks(false)} participantes={participantes} />}
     </div>
   );
 }
