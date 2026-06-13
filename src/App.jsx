@@ -275,10 +275,10 @@ export default function App() {
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Fase Grupos</span>
               </button>
 
-              <button onClick={() => setShowTodayPicks(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-orange-600 hover:to-red-600 border border-slate-700 hover:border-orange-400 flex flex-col items-center justify-center transition-all group">
+              {/* <button onClick={() => setShowTodayPicks(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-orange-600 hover:to-red-600 border border-slate-700 hover:border-orange-400 flex flex-col items-center justify-center transition-all group">
                 <span className="text-base group-hover:scale-110 transition-transform">🎯</span>
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Hoy</span>
-              </button>
+              </button> */}
 
               {currentUser?.rol === 'admin' && (
 
