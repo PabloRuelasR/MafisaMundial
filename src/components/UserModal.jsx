@@ -12,6 +12,8 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../services/firebase';
+import { traducirPais } from '../js/Utils/traductor';
+
 
 export default function UserModal({
   user,
@@ -268,7 +270,7 @@ export default function UserModal({
                                                 font-black
                                                 text-lg
                                             ">
-                        {pred.equipo1}
+                        {traducirPais(pred.equipo1)}
                       </div>
 
                     </div>
@@ -518,7 +520,7 @@ export default function UserModal({
                                                 font-black
                                                 text-lg
                                             ">
-                        {pred.equipo2}
+                        {traducirPais(pred.equipo2)}
                       </div>
 
                     </div>

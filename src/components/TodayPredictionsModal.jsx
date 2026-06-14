@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebase';
-
+import { traducirPais } from '../js/Utils/traductor';
 const getPeruDate = () => {
     const date = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Lima" }));
     const yyyy = date.getFullYear();
@@ -84,13 +84,13 @@ export default function TodayPredictionsModal({ onClose, participantes }) {
                                         {/* HEADER DEL PARTIDO */}
                                         <div className="bg-slate-950 p-4 flex items-center justify-center gap-6 border-b border-slate-800">
                                             <div className="flex items-center gap-3 w-1/3 justify-end">
-                                                <span className="font-black text-sm sm:text-lg uppercase text-slate-300 text-right">{match.equipo1}</span>
+                                                <span className="font-black text-sm sm:text-lg uppercase text-slate-300 text-right">{traducirPais(match.equipo1)}</span>
                                                 <img src={`https://flagcdn.com/w40/${match.flag1}.png`} className="w-8 h-6 rounded" alt="" />
                                             </div>
                                             <div className="font-black text-slate-500 text-xl">VS</div>
                                             <div className="flex items-center gap-3 w-1/3 justify-start">
                                                 <img src={`https://flagcdn.com/w40/${match.flag2}.png`} className="w-8 h-6 rounded" alt="" />
-                                                <span className="font-black text-sm sm:text-lg uppercase text-slate-300 text-left">{match.equipo2}</span>
+                                                <span className="font-black text-sm sm:text-lg uppercase text-slate-300 text-left">{traducirPais(match.equipo2)}</span>
                                             </div>
                                         </div>
 

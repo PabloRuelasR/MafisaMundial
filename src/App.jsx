@@ -24,6 +24,8 @@ import MyPredictionsModal from './components/MyPredictionsModal';
 import GroupPicksModal from './components/GroupPicksModal';
 import './styles/animations.css';
 import TodayPredictionsModal from './components/TodayPredictionsModal';
+import AdminEditPredictionsModal from './components/AdminEditPredictionsModal';
+import { traducirPais } from './js/Utils/traductor';
 
 export default function App() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -39,6 +41,7 @@ export default function App() {
   const [showGroupPicks, setShowGroupPicks] = useState(false);
   const [showTodayPicks, setShowTodayPicks] = useState(false);
   const [tickerItems, setTickerItems] = useState([]);
+  const [showAdminEditPicks, setShowAdminEditPicks] = useState(false);
   const participantesRef = useRef(participantes);
 
   useEffect(() => {
@@ -98,23 +101,6 @@ export default function App() {
   }, [currentUser?.uid]);
 
   useEffect(() => {
-    const traducciones = {
-      "Mexico": "México", "South Africa": "Sudáfrica", "South Korea": "Corea del Sur",
-      "Czech Republic": "República Checa", "Canada": "Canadá", "Bosnia & Herzegovina": "Bosnia y Herzegovina",
-      "Qatar": "Catar", "Switzerland": "Suiza", "Brazil": "Brasil", "Morocco": "Marruecos",
-      "Haiti": "Haití", "Scotland": "Escocia", "USA": "EE. UU.", "Paraguay": "Paraguay",
-      "Australia": "Australia", "Turkey": "Turquía", "Germany": "Alemania", "Curaçao": "Curazao",
-      "Ivory Coast": "Costa de Marfil", "Ecuador": "Ecuador", "Netherlands": "Países Bajos",
-      "Japan": "Japón", "Sweden": "Suecia", "Tunisia": "Túnez", "Belgium": "Bélgica",
-      "Egypt": "Egipto", "Iran": "Irán", "New Zealand": "Nueva Zelanda", "Spain": "España",
-      "Cape Verde": "Cabo Verde", "Saudi Arabia": "Arabia Saudita", "Uruguay": "Uruguay",
-      "France": "Francia", "Senegal": "Senegal", "Iraq": "Irak", "Norway": "Noruega",
-      "Argentina": "Argentina", "Algeria": "Argelia", "Austria": "Austria", "Jordan": "Jordania",
-      "Portugal": "Portugal", "DR Congo": "R. D. del Congo", "Uzbekistan": "Uzbekistán",
-      "Colombia": "Colombia", "England": "Inglaterra", "Croatia": "Croacia", "Ghana": "Ghana", "Panama": "Panamá"
-    };
-
-    const traducir = (nombre) => traducciones[nombre] || nombre;
 
     const qPartidos = query(collection(db, 'partidos'), where('estado', '==', 'finalizado'));
 
@@ -133,8 +119,8 @@ export default function App() {
         });
 
         const lastMatch = finalizados[0];
-        const eq1 = traducir(lastMatch.equipo1);
-        const eq2 = traducir(lastMatch.equipo2);
+        const eq1 = traducirPais(lastMatch.equipo1);
+        const eq2 = traducirPais(lastMatch.equipo2);
 
         const qPronos = query(collection(db, 'pronosticos'), where('partidoId', '==', lastMatch.id));
         const pronosSnap = await getDocs(qPronos);
@@ -248,7 +234,7 @@ export default function App() {
           <Header />
 
           {/* TARJETA UNIFICADA (Puntos + Controles) */}
-          <div className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
+          <div className="w-full max-w-4xl bg-slate-900/80 backdrop-blur-xl p-2 sm:p-3 rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 relative">
 
             {/* Puntos de Usuario */}
             <div className="flex items-center gap-3 px-5 py-2 bg-black/30 rounded-xl border border-white/5 w-full sm:w-auto justify-center">
@@ -287,6 +273,10 @@ export default function App() {
                   <button onClick={() => setShowAdmin(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-red-950/40 border border-red-900/30 hover:bg-red-900 flex flex-col items-center justify-center transition-all group">
                     <span className="text-base group-hover:scale-110 transition-transform">🛠</span>
                     <span className="text-[8px] sm:text-[9px] font-bold text-red-400 uppercase tracking-wider mt-0.5">Auditar</span>
+                  </button>
+                  <button onClick={() => setShowAdminEditPicks(true)} className="flex-1 sm:w-[85px] py-2 rounded-xl bg-purple-950/40 border border-purple-900/30 hover:bg-purple-900 flex flex-col items-center justify-center transition-all group">
+                    <span className="text-base group-hover:scale-110 transition-transform">📝</span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-purple-400 uppercase tracking-wider mt-0.5">Editar Picks</span>
                   </button>
                 </>
               )}
@@ -367,6 +357,12 @@ export default function App() {
       <UserModal user={selectedUser} onClose={() => setSelectedUser(null)} />
       {showPredictions && (<div className="fixed inset-0 z-[400] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4" onClick={() => setShowPredictions(false)}><div className="w-full max-w-6xl max-h-[95dvh] overflow-y-auto rounded-3xl border border-slate-700 bg-[#081226] p-4 sm:p-8 custom-scrollbar" onClick={(e) => e.stopPropagation()}><div className="flex items-center justify-between mb-6 sm:mb-8"><div><h2 className="text-2xl sm:text-4xl font-black">Pronósticos</h2><p className="text-slate-400 mt-1 text-xs sm:text-sm">Registra tus resultados estimados</p></div><button onClick={() => setShowPredictions(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-xl flex items-center justify-center">×</button></div><PredictionPanel currentUser={currentUser} /></div></div>)}
       {showAdmin && (<div className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4" onClick={() => setShowAdmin(false)}><div className="w-full max-w-7xl max-h-[95dvh] overflow-y-auto rounded-3xl border border-slate-700 bg-[#081226] p-4 sm:p-8 custom-scrollbar" onClick={(e) => e.stopPropagation()}><div className="flex items-center justify-between mb-6 sm:mb-8"><div><h2 className="text-2xl sm:text-4xl font-black">Panel Admin</h2><p className="text-slate-400 mt-1 text-xs sm:text-sm">Auditoría oficial de marcadores</p></div><button onClick={() => setShowAdmin(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-xl flex items-center justify-center">×</button></div><AdminPanel /></div></div>)}
+      {showAdminEditPicks && (
+        <AdminEditPredictionsModal
+           participantes={participantes}
+           onClose={() => setShowAdminEditPicks(false)}
+        />
+      )}
       {showMyPredictions && <MyPredictionsModal currentUser={currentUser} onClose={() => setShowMyPredictions(false)} />}
       {showGroupPicks && <GroupPicksModal onClose={() => setShowGroupPicks(false)} />}
       {showTodayPicks && <TodayPredictionsModal onClose={() => setShowTodayPicks(false)} participantes={participantes} />}

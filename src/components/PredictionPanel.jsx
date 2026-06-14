@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllMatches, getUserPredictions, savePrediction } from '../services/predictions';
+import { traducirPais } from '../js/Utils/traductor';
 import Toast from './Toast';
 
 // Obtenemos la fecha actual exacta en Perú
@@ -190,7 +191,7 @@ export default function PredictionPanel({ currentUser }) {
                                         {/* EQUIPO 1 */}
                                         <div className="flex flex-col items-center text-center w-[90px] sm:w-[140px]">
                                             <img src={`https://flagcdn.com/w80/${match.flag1}.png`} className={`w-12 h-8 sm:w-20 sm:h-14 rounded sm:rounded-md mb-2 sm:mb-3 shadow-lg object-cover ${isLocked ? 'grayscale opacity-60' : ''}`} />
-                                            <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">{match.equipo1}</div>
+                                            <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">{traducirPais(match.equipo1)}</div>
                                         </div>
 
                                         {/* SCORE */}
@@ -217,7 +218,7 @@ export default function PredictionPanel({ currentUser }) {
                                         {/* EQUIPO 2 */}
                                         <div className="flex flex-col items-center text-center w-[90px] sm:w-[140px]">
                                             <img src={`https://flagcdn.com/w80/${match.flag2}.png`} className={`w-12 h-8 sm:w-20 sm:h-14 rounded sm:rounded-md mb-2 sm:mb-3 shadow-lg object-cover ${isLocked ? 'grayscale opacity-60' : ''}`} />
-                                            <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">{match.equipo2}</div>
+                                            <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">{traducirPais(match.equipo2)}</div>
                                         </div>
 
                                     </div>

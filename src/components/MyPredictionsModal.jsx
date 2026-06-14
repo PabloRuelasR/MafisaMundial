@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../services/firebase';
+import { traducirPais } from '../js/Utils/traductor';
 
 // Obtenemos la fecha actual exacta en Perú
 const getPeruDate = () => {
@@ -167,7 +168,7 @@ export default function MyPredictionsModal({
                                                 className={`w-12 h-8 sm:w-20 sm:h-14 rounded sm:rounded-md mb-2 sm:mb-3 shadow-lg object-cover ${finalizado ? 'grayscale opacity-60' : ''}`}
                                             />
                                             <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">
-                                                {pred.equipo1}
+                                                {traducirPais(pred.equipo1)}
                                             </div>
                                         </div>
 
@@ -189,7 +190,7 @@ export default function MyPredictionsModal({
                                                 className={`w-12 h-8 sm:w-20 sm:h-14 rounded sm:rounded-md mb-2 sm:mb-3 shadow-lg object-cover ${finalizado ? 'grayscale opacity-60' : ''}`}
                                             />
                                             <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-300">
-                                                {pred.equipo2}
+                                                {traducirPais(pred.equipo2)}
                                             </div>
                                         </div>
                                     </div>
