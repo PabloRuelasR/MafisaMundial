@@ -3,7 +3,6 @@ import { getAllMatches, getUserPredictions, savePrediction } from '../services/p
 import { traducirPais } from '../js/Utils/traductor';
 import Toast from './Toast';
 
-// Obtenemos la fecha actual exacta en Perú
 const getPeruDate = () => {
     const date = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Lima" }));
     const yyyy = date.getFullYear();
@@ -22,7 +21,6 @@ export default function PredictionPanel({ currentUser }) {
     const [savingMatchId, setSavingMatchId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
     const [showWarning, setShowWarning] = useState(true);
-    const [alargues, setAlargues] = useState({}); // Guarda { [`${match.id}`]: true/false }
     const todayPeru = getPeruDate();
 
     useEffect(() => {
@@ -38,7 +36,6 @@ export default function PredictionPanel({ currentUser }) {
 
             const grouped = {};
             matchesData.forEach(m => {
-                // FILTRO: Solo mostramos partidos de hoy en adelante (Oculta fase de grupos pasada)
                 if (m.fechaPartido >= todayPeru) {
                     if (!grouped[m.fechaPartido]) grouped[m.fechaPartido] = [];
                     grouped[m.fechaPartido].push(m);
@@ -55,10 +52,9 @@ export default function PredictionPanel({ currentUser }) {
                 if (savedDate && sortedDates.includes(savedDate)) return savedDate;
                 return sortedDates.find(d => d >= todayPeru) || sortedDates[sortedDates.length - 1] || '';
             });
-
+            
             setPredictions(predictionsData);
 
-            // 1. Cargar los Scores
             setScores(prevScores => {
                 const updatedScores = { ...prevScores };
                 predictionsData.forEach(p => {
@@ -66,17 +62,6 @@ export default function PredictionPanel({ currentUser }) {
                     updatedScores[`${p.partidoId}_2`] = p.score2;
                 });
                 return updatedScores;
-            });
-
-            // 2. Cargar los Alargues
-            setAlargues(prevAlargues => {
-                const updatedAlargues = { ...prevAlargues };
-                predictionsData.forEach(p => {
-                    if (p.pronosticoAlargue !== undefined) {
-                        updatedAlargues[`${p.partidoId}`] = p.pronosticoAlargue;
-                    }
-                });
-                return updatedAlargues;
             });
 
         } catch (error) {
@@ -92,15 +77,9 @@ export default function PredictionPanel({ currentUser }) {
     const handleSave = async (match) => {
         const score1 = Number(scores[`${match.id}_1`]);
         const score2 = Number(scores[`${match.id}_2`]);
-        const pronosticoAlargue = alargues[`${match.id}`];
 
         if (scores[`${match.id}_1`] === undefined || scores[`${match.id}_2`] === undefined || scores[`${match.id}_1`] === '' || scores[`${match.id}_2`] === '' || isNaN(score1) || isNaN(score2)) {
             setToast({ show: true, message: 'Ingresa ambos scores', type: 'error' });
-            return;
-        }
-
-        if (pronosticoAlargue === undefined) {
-            setToast({ show: true, message: 'Selecciona si habrá tiempo de alargue', type: 'error' });
             return;
         }
 
@@ -110,8 +89,7 @@ export default function PredictionPanel({ currentUser }) {
                 uid: currentUser.uid,
                 partido: match,
                 score1,
-                score2,
-                pronosticoAlargue // Pasar el nuevo campo booleano
+                score2
             });
             await loadData();
             setToast({ show: true, message: 'Pronóstico registrado exitosamente', type: 'success' });
@@ -147,7 +125,7 @@ export default function PredictionPanel({ currentUser }) {
                         <div className="pr-6">
                             <h3 className="text-blue-400 font-bold mb-1">Bloqueo de Partidos - Fase Final</h3>
                             <p className="text-slate-400 text-sm">
-                                Los partidos se bloquearán <strong>exactamente 1 hora antes de su inicio</strong>. Asegúrate de registrar o actualizar tu pronóstico con anticipación. Además, deberás elegir si habrá tiempo de alargue o no (Acierto: <strong>+2 pts</strong> / Error: <strong>-2 pts</strong>). En caso de penales, solo se considerará el resultado final tras 120 minutos de juego según corresponda.
+                                Los partidos se bloquearán <strong>exactamente 1 hora antes de su inicio</strong>. Asegúrate de registrar o actualizar tu pronóstico con anticipación. En caso de penales, solo cuenta el resultado de los 90/120 minutos reglamentarios.
                             </p>
                         </div>
                         <button
@@ -171,8 +149,8 @@ export default function PredictionPanel({ currentUser }) {
                                     localStorage.setItem('activePredictionDate', date);
                                 }}
                                 className={`px-6 py-4 rounded-2xl font-black whitespace-nowrap transition-all ${isActive
-                                    ? 'bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]'
-                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                        ? 'bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]'
+                                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 {formatDateTab(date)}
@@ -184,22 +162,19 @@ export default function PredictionPanel({ currentUser }) {
                 {/* LISTA DE PARTIDOS DEL DÍA */}
                 <div className="space-y-6">
                     {activeMatches.map((match) => {
-                        // Armamos la fecha absoluta forzando la zona horaria de Perú (-05:00)
                         const matchTimestamp = new Date(`${match.fechaPartido}T${match.horaPartido}:00-05:00`).getTime();
-                        // Obtenemos la hora actual en milisegundos
                         const currentTimestamp = Date.now();
-                        // Restamos 1 hora (3,600,000 ms) a la hora del partido para el límite
                         const isLocked = currentTimestamp >= (matchTimestamp - 3600000);
+
                         const prediction = getPrediction(match.id);
                         const hasPredicted = !!prediction;
                         const isSaving = savingMatchId === match.id;
 
                         return (
                             <div key={match.id} className="bg-gradient-to-br from-slate-900 to-slate-950 border border-purple-500/30 hover:border-purple-500/80 rounded-3xl p-5 sm:p-6 relative overflow-hidden shadow-[0_10px_30px_rgba(168,85,247,0.05)] transition-all">
-
-                                {/* Brillo superior Fase Final */}
+                                
                                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50"></div>
-
+                                
                                 {isLocked && (
                                     <div className="absolute inset-0 bg-slate-950/60 z-0 pointer-events-none backdrop-blur-[1px]" />
                                 )}
@@ -253,32 +228,6 @@ export default function PredictionPanel({ currentUser }) {
                                             <div className="font-black text-xs sm:text-lg leading-tight uppercase text-slate-200">{traducirPais(match.equipo2)}</div>
                                         </div>
 
-                                    </div>
-
-                                    <div className="w-full max-w-xs mb-5 flex flex-col items-center">
-                                        <span className="text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">¿Habrá tiempo de alargue? (+2 / -2 pts)</span>
-                                        <div className="flex gap-4 w-full">
-                                            <button
-                                                disabled={isLocked || isSaving}
-                                                onClick={() => setAlargues(prev => ({ ...prev, [`${match.id}`]: true }))}
-                                                className={`flex-1 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition-all border ${alargues[`${match.id}`] === true
-                                                        ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]'
-                                                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-900'
-                                                    }`}
-                                            >
-                                                Sí
-                                            </button>
-                                            <button
-                                                disabled={isLocked || isSaving}
-                                                onClick={() => setAlargues(prev => ({ ...prev, [`${match.id}`]: false }))}
-                                                className={`flex-1 py-2 rounded-xl font-black text-xs uppercase tracking-wider transition-all border ${alargues[`${match.id}`] === false
-                                                        ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]'
-                                                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-900'
-                                                    }`}
-                                            >
-                                                No
-                                            </button>
-                                        </div>
                                     </div>
 
                                     {/* ESTADO CON LÍNEAS VERTICALES */}

@@ -11,7 +11,6 @@ import {
 
 import { db } from './firebase';
 
-// Obtener partidos disponibles para mañana
 export const getAllMatches = async () => {
   const q = query(
     collection(db, 'partidos'),
@@ -26,9 +25,7 @@ export const getAllMatches = async () => {
   }));
 };
 
-// Obtener pronósticos del usuario
 export const getUserPredictions = async (uid) => {
-
   const q = query(
     collection(db, 'pronosticos'),
     where('uid', '==', uid)
@@ -42,13 +39,11 @@ export const getUserPredictions = async (uid) => {
   }));
 };
 
-// Registrar pronóstico
 export const savePrediction = async ({
   uid,
   partido,
   score1,
-  score2,
-  pronosticoAlargue // Recibir el nuevo campo
+  score2
 }) => {
 
   const predictionId = `${uid}_${partido.id}`;
@@ -70,18 +65,18 @@ export const savePrediction = async ({
     flag2: partido.flag2,
     score1,
     score2,
-    pronosticoAlargue, // Se guarda en el documento
     resultadoPronosticado,
     acertoGanador: false,
     acertoScoreExacto: false,
-    acertoAlargue: false, // Inicializador
     puntosGanador: 0,
     puntosScore: 0,
-    puntosAlargue: 0,
     puntosTotales: 0,
     auditado: false,
     createdAt: serverTimestamp()
   };
 
-  await setDoc(doc(db, 'pronosticos', predictionId), predictionData);
+  await setDoc(
+    doc(db, 'pronosticos', predictionId),
+    predictionData
+  );
 };
