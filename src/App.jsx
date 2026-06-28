@@ -26,6 +26,7 @@ import './styles/animations.css';
 import TodayPredictionsModal from './components/TodayPredictionsModal';
 import AdminEditPredictionsModal from './components/AdminEditPredictionsModal';
 import { traducirPais } from './js/Utils/traductor';
+import AdminSeeder from './components/AdminSeeder';
 
 export default function App() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -366,6 +367,7 @@ export default function App() {
       {showMyPredictions && <MyPredictionsModal currentUser={currentUser} onClose={() => setShowMyPredictions(false)} />}
       {showGroupPicks && <GroupPicksModal onClose={() => setShowGroupPicks(false)} />}
       {showTodayPicks && <TodayPredictionsModal onClose={() => setShowTodayPicks(false)} participantes={participantes} />}
+        {/* <AdminSeeder /> */}
     </div>
   );
 }

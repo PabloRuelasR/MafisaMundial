@@ -47,7 +47,8 @@ export const savePrediction = async ({
   uid,
   partido,
   score1,
-  score2
+  score2,
+  pronosticoAlargue // Recibir el nuevo campo
 }) => {
 
   const predictionId = `${uid}_${partido.id}`;
@@ -60,38 +61,27 @@ export const savePrediction = async ({
         : 'EMPATE';
 
   const predictionData = {
-
     uid,
-
     partidoId: partido.id,
-
     fechaPartido: partido.fechaPartido,
-
     equipo1: partido.equipo1,
     equipo2: partido.equipo2,
-
     flag1: partido.flag1,
     flag2: partido.flag2,
-
     score1,
     score2,
-
+    pronosticoAlargue, // Se guarda en el documento
     resultadoPronosticado,
-
     acertoGanador: false,
     acertoScoreExacto: false,
-
+    acertoAlargue: false, // Inicializador
     puntosGanador: 0,
     puntosScore: 0,
+    puntosAlargue: 0,
     puntosTotales: 0,
-
     auditado: false,
-
     createdAt: serverTimestamp()
   };
 
-  await setDoc(
-    doc(db, 'pronosticos', predictionId),
-    predictionData
-  );
+  await setDoc(doc(db, 'pronosticos', predictionId), predictionData);
 };

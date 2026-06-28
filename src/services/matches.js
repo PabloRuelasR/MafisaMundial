@@ -44,3 +44,38 @@ export const seedMatches = async () => {
     
     console.log('Todos los partidos insertados correctamente (Cero duplicados).');
 };
+
+/**
+ * Registra los partidos de la fase final en Firebase.
+ * @param {Array} knockoutMatches - Arreglo con los partidos ya definidos.
+ */
+export const seedKnockoutMatches = async (knockoutMatches) => {
+    try {
+        for (const match of knockoutMatches) {
+            const matchDoc = {
+                fechaPartido: match.date,
+                horaPartido: match.time,
+                equipo1: match.team1,
+                equipo2: match.team2,
+                flag1: flagMap[match.team1] || "un",
+                flag2: flagMap[match.team2] || "un",
+                marcador1: null,
+                marcador2: null,
+                resultadoOficial: null,
+                estado: 'pendiente',
+                fase: match.round || 'Eliminatorias', // Campo opcional para identificar la fase
+                createdAt: Date.now()
+            };
+
+            // Creamos el ID ÚNICO juntando los nombres de los equipos
+            const matchId = `${match.team1}_${match.team2}`.replace(/\s+/g, '_');
+
+            // Usamos setDoc para crear o actualizar sin duplicar
+            await setDoc(doc(db, 'partidos', matchId), matchDoc);
+        }
+        
+        console.log('✅ Partidos de la fase final insertados correctamente.');
+    } catch (error) {
+        console.error('❌ Error al insertar partidos de la fase final:', error);
+    }
+};
