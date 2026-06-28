@@ -147,7 +147,7 @@ export default function PredictionPanel({ currentUser }) {
                         <div className="pr-6">
                             <h3 className="text-blue-400 font-bold mb-1">Bloqueo de Partidos - Fase Final</h3>
                             <p className="text-slate-400 text-sm">
-                                Los partidos se bloquearán <strong>exactamente 1 hora antes de su inicio</strong>. Asegúrate de registrar o actualizar tu pronóstico con anticipación. En caso de penales, solo cuenta el resultado de los 120 minutos previos.
+                                Los partidos se bloquearán <strong>exactamente 1 hora antes de su inicio</strong>. Asegúrate de registrar o actualizar tu pronóstico con anticipación. Además, deberás elegir si habrá tiempo de alargue o no (Acierto: <strong>+2 pts</strong> / Error: <strong>-2 pts</strong>). En caso de penales, solo se considerará el resultado final tras 120 minutos de juego según corresponda.
                             </p>
                         </div>
                         <button
