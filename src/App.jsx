@@ -261,10 +261,10 @@ export default function App() {
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Historial</span>
               </button>
 
-              <button onClick={() => setShowGroupPicks(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-emerald-600 hover:to-teal-600 border border-slate-700 hover:border-emerald-400 flex flex-col items-center justify-center transition-all group">
+              {/*<button onClick={() => setShowGroupPicks(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-emerald-600 hover:to-teal-600 border border-slate-700 hover:border-emerald-400 flex flex-col items-center justify-center transition-all group">
                 <span className="text-base group-hover:scale-110 transition-transform">📊</span>
                 <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Fase Grupos</span>
-              </button>
+              </button>*/}
 
               {/* <button onClick={() => setShowLiveMatch(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-amber-600 hover:to-orange-600 border border-slate-700 hover:border-amber-400 flex flex-col items-center justify-center transition-all group relative">
                 <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
