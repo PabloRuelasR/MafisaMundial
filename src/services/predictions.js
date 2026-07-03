@@ -14,7 +14,7 @@ import { db } from './firebase';
 export const getAllMatches = async () => {
   const q = query(
     collection(db, 'partidos'),
-    orderBy('fechaPartido', 'asc')
+    orderBy('horaPartido', 'asc')
   );
 
   const snapshot = await getDocs(q);
