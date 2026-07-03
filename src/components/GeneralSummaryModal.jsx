@@ -56,8 +56,8 @@ export default function GeneralSummaryModal({ onClose, participantes }) {
                 if (!datesMap[date][pr.uid]) datesMap[date][pr.uid] = { totalPoints: 0, details: [] };
 
                 // Hacemos el mapeo más robusto (acepta minúsculas o variaciones por si acaso)
-                const realScore1 = matchData.marcadorOficial1 ?? matchData.marcadoroficial1 ?? matchData.resultado1;
-                const realScore2 = matchData.marcadorOficial2 ?? matchData.marcadoroficial2 ?? matchData.resultado2;
+                const realScore1 = matchData.marcador1 ?? matchData.marcador1 ?? matchData.resultado1;
+                const realScore2 = matchData.marcador2 ?? matchData.marcador2 ?? matchData.resultado2;
                 
                 // Creamos una copia del partido para no mutar el original en cada iteración
                 const match = { 
