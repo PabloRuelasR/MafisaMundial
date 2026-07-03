@@ -3,6 +3,14 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { traducirPais } from '../js/Utils/traductor';
 
+const getPeruDate = () => {
+    const date = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Lima" }));
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+};
+
 export default function GeneralSummaryModal({ onClose, participantes }) {
     const [summaryData, setSummaryData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,6 +25,9 @@ export default function GeneralSummaryModal({ onClose, participantes }) {
 
     const loadSummaryData = async () => {
         try {
+            // Obtener la fecha de hoy
+            const today = getPeruDate();
+
             // 1. Traer todos los partidos
             const snapPartidos = await getDocs(collection(db, 'partidos'));
             const matchesMap = {};
@@ -37,14 +48,17 @@ export default function GeneralSummaryModal({ onClose, participantes }) {
 
                 const date = matchData.fechaPartido;
                 if (!date) return;
+                
+                // EXCLUIR EL DÍA ACTUAL: Si la fecha del partido es hoy, ignoramos este registro
+                if (date === today) return;
 
                 if (!datesMap[date]) datesMap[date] = {};
                 if (!datesMap[date][pr.uid]) datesMap[date][pr.uid] = { totalPoints: 0, details: [] };
 
                 // Hacemos el mapeo más robusto (acepta minúsculas o variaciones por si acaso)
-                const realScore1 = matchData.marcador1 ?? matchData.marcador1 ?? matchData.resultado1;
-                const realScore2 = matchData.marcador2 ?? matchData.marcador2 ?? matchData.resultado2;
-                console.log(matchData)
+                const realScore1 = matchData.marcadorOficial1 ?? matchData.marcadoroficial1 ?? matchData.resultado1;
+                const realScore2 = matchData.marcadorOficial2 ?? matchData.marcadoroficial2 ?? matchData.resultado2;
+                
                 // Creamos una copia del partido para no mutar el original en cada iteración
                 const match = { 
                     ...matchData, 
@@ -53,6 +67,7 @@ export default function GeneralSummaryModal({ onClose, participantes }) {
                 };
 
                 let pts = 0;
+                
                 // Buscamos puntosTotales, aceptando también minúsculas
                 const puntosRegistrados = pr.puntosTotales ?? pr.puntostotales;
 
