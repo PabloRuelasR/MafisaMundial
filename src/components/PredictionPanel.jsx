@@ -75,6 +75,16 @@ export default function PredictionPanel({ currentUser }) {
     const getPrediction = (matchId) => predictions.find(p => p.partidoId === matchId);
 
     const handleSave = async (match) => {
+        // 1. Validar restricción de tiempo (1 hora antes del partido)
+        const matchTimestamp = new Date(`${match.fechaPartido}T${match.horaPartido}:00-05:00`).getTime();
+        const currentTimestamp = Date.now();
+        
+        if (currentTimestamp >= (matchTimestamp - 3600000)) {
+            setToast({ show: true, message: 'El partido ya está bloqueado (falta menos de 1 hora)', type: 'error' });
+            return; // Detiene la ejecución para no guardar
+        }
+
+        // 2. Validar que los scores estén ingresados y sean números
         const score1 = Number(scores[`${match.id}_1`]);
         const score2 = Number(scores[`${match.id}_2`]);
 
@@ -83,6 +93,7 @@ export default function PredictionPanel({ currentUser }) {
             return;
         }
 
+        // 3. Proceder a guardar el pronóstico
         try {
             setSavingMatchId(match.id);
             await savePrediction({
