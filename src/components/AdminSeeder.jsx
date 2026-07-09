@@ -5,32 +5,8 @@ import { seedKnockoutMatches } from '../services/matches';
 // Copiamos el array aquí directamente para facilitar la ejecución limpia de un solo clic
 export const partidosFaseFinal = [
     // Domingo 28 de junio
-    { round: "Round of 32", date: "2026-06-28", time: "14:00", team1: "South Africa", team2: "Canada" }, // Partido 73
+    { round: "Round of 8", date: "2026-07-09", time: "15:00", team1: "France", team2: "Morocco" }, // Partido 73
     
-    // Lunes 29 de junio
-    { round: "Round of 32", date: "2026-06-29", time: "12:00", team1: "Brazil", team2: "Japan" }, // Partido 76
-    { round: "Round of 32", date: "2026-06-29", time: "15:30", team1: "Germany", team2: "Paraguay" }, // Partido 74
-    { round: "Round of 32", date: "2026-06-29", time: "20:00", team1: "Netherlands", team2: "Morocco" }, // Partido 75
-    
-    // Martes 30 de junio
-    { round: "Round of 32", date: "2026-06-30", time: "12:00", team1: "Ivory Coast", team2: "Norway" }, // Partido 78
-    { round: "Round of 32", date: "2026-06-30", time: "16:00", team1: "France", team2: "Sweden" }, // Partido 77
-    { round: "Round of 32", date: "2026-06-30", time: "20:00", team1: "Mexico", team2: "Ecuador" }, // Partido 79
-    
-    // Miércoles 1 de julio
-    { round: "Round of 32", date: "2026-07-01", time: "11:00", team1: "England", team2: "DR Congo" }, // Partido 80
-    { round: "Round of 32", date: "2026-07-01", time: "15:00", team1: "Belgium", team2: "Senegal" }, // Partido 82
-    { round: "Round of 32", date: "2026-07-01", time: "19:00", team1: "USA", team2: "Bosnia & Herzegovina" }, // Partido 81
-    
-    // Jueves 2 de julio
-    { round: "Round of 32", date: "2026-07-02", time: "14:00", team1: "Spain", team2: "Austria" }, // Partido 84
-    { round: "Round of 32", date: "2026-07-02", time: "18:00", team1: "Portugal", team2: "Croatia" }, // Partido 83
-    { round: "Round of 32", date: "2026-07-02", time: "22:00", team1: "Switzerland", team2: "Algeria" }, // Partido 85
-    
-    // Viernes 3 de julio
-    { round: "Round of 32", date: "2026-07-03", time: "13:00", team1: "Australia", team2: "Egypt" }, // Partido 88
-    { round: "Round of 32", date: "2026-07-03", time: "17:00", team1: "Argentina", team2: "Cape Verde" }, // Partido 86
-    { round: "Round of 32", date: "2026-07-03", time: "20:30", team1: "Colombia", team2: "Ghana" } // Partido 87
 ];
 
 export default function AdminSeeder() {
