@@ -384,7 +384,9 @@ export default function App() {
       {showTodayPicks && <TodayPredictionsModal onClose={() => setShowTodayPicks(false)} participantes={participantes} />}
         {showLiveMatch && <LiveMatchModal onClose={() => setShowLiveMatch(false)} />}
           {showGeneralSummary && <GeneralSummaryModal onClose={() => setShowGeneralSummary(false)} participantes={participantes} />}
-
+      {currentUser?.rol === 'admin' && (
+          <AdminSeeder></AdminSeeder>
+        )}
     </div>
   );
 }
