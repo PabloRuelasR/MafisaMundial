@@ -175,7 +175,7 @@ export default function PredictionPanel({ currentUser }) {
                     {activeMatches.map((match) => {
                         const matchTimestamp = new Date(`${match.fechaPartido}T${match.horaPartido}:00-05:00`).getTime();
                         const currentTimestamp = Date.now();
-                        const isLocked = currentTimestamp >= (matchTimestamp - 3600000);
+                        const isLocked = currentTimestamp >= (matchTimestamp);
 
                         const prediction = getPrediction(match.id);
                         const hasPredicted = !!prediction;
