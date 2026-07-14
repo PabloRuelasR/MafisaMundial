@@ -278,8 +278,8 @@ export default function App() {
               </button>
 
               <button onClick={() => setShowGeneralSummary(true)} className="flex-1 sm:w-[100px] py-2 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 hover:from-emerald-600 hover:to-teal-600 border border-slate-700 hover:border-emerald-400 flex flex-col items-center justify-center transition-all group">
-                  <span className="text-base group-hover:scale-110 transition-transform">📊</span>
-                  <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Resumen</span>
+                <span className="text-base group-hover:scale-110 transition-transform">📊</span>
+                <span className="text-[8px] sm:text-[9px] font-bold text-slate-300 uppercase tracking-wider mt-0.5">Resumen</span>
               </button>
 
               {currentUser?.rol === 'admin' && (
@@ -375,16 +375,19 @@ export default function App() {
       {showAdmin && (<div className="fixed inset-0 z-[500] bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4" onClick={() => setShowAdmin(false)}><div className="w-full max-w-7xl max-h-[95dvh] overflow-y-auto rounded-3xl border border-slate-700 bg-[#081226] p-4 sm:p-8 custom-scrollbar" onClick={(e) => e.stopPropagation()}><div className="flex items-center justify-between mb-6 sm:mb-8"><div><h2 className="text-2xl sm:text-4xl font-black">Panel Admin</h2><p className="text-slate-400 mt-1 text-xs sm:text-sm">Auditoría oficial de marcadores</p></div><button onClick={() => setShowAdmin(false)} className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-xl flex items-center justify-center">×</button></div><AdminPanel /></div></div>)}
       {showAdminEditPicks && (
         <AdminEditPredictionsModal
-           participantes={participantes}
-           onClose={() => setShowAdminEditPicks(false)}
+          participantes={participantes}
+          onClose={() => setShowAdminEditPicks(false)}
         />
       )}
       {showMyPredictions && <MyPredictionsModal currentUser={currentUser} onClose={() => setShowMyPredictions(false)} />}
       {showGroupPicks && <GroupPicksModal onClose={() => setShowGroupPicks(false)} />}
       {showTodayPicks && <TodayPredictionsModal onClose={() => setShowTodayPicks(false)} participantes={participantes} />}
-        {showLiveMatch && <LiveMatchModal onClose={() => setShowLiveMatch(false)} />}
-          {showGeneralSummary && <GeneralSummaryModal onClose={() => setShowGeneralSummary(false)} participantes={participantes} />}
+      {showLiveMatch && <LiveMatchModal onClose={() => setShowLiveMatch(false)} />}
+      {showGeneralSummary && <GeneralSummaryModal onClose={() => setShowGeneralSummary(false)} participantes={participantes} />}
 
+      {currentUser?.rol === 'admin' && (
+        <AdminSeeder></AdminSeeder>
+      )}
     </div>
   );
 }

@@ -79,8 +79,8 @@ export default function PredictionPanel({ currentUser }) {
         const matchTimestamp = new Date(`${match.fechaPartido}T${match.horaPartido}:00-05:00`).getTime();
         const currentTimestamp = Date.now();
         
-        if (currentTimestamp >= (matchTimestamp - 3600000)) {
-            setToast({ show: true, message: 'El partido ya está bloqueado (falta menos de 1 hora)', type: 'error' });
+        if (currentTimestamp >= (matchTimestamp)) {
+            setToast({ show: true, message: 'El partido ya está bloqueado ', type: 'error' });
             return; // Detiene la ejecución para no guardar
         }
 
