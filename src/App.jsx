@@ -385,9 +385,9 @@ export default function App() {
       {showLiveMatch && <LiveMatchModal onClose={() => setShowLiveMatch(false)} />}
       {showGeneralSummary && <GeneralSummaryModal onClose={() => setShowGeneralSummary(false)} participantes={participantes} />}
 
-      {currentUser?.rol === 'admin' && (
+      {/* {currentUser?.rol === 'admin' && (
         <AdminSeeder></AdminSeeder>
-      )}
+      )} */}
     </div>
   );
 }

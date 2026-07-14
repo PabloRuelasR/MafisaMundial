@@ -86,7 +86,7 @@ export default function TodayPredictionsModal({ onClose, participantes }) {
         const oneHourInMs = 3600000;
         const timeDifference = matchDate.getTime() - now.getTime();
 
-        return timeDifference <= oneHourInMs;
+        return timeDifference <= 0;
     };
 
     return (
