@@ -5,8 +5,8 @@ import { seedKnockoutMatches } from '../services/matches';
 // Copiamos el array aquí directamente para facilitar la ejecución limpia de un solo clic
 export const partidosFaseFinal = [
     // Domingo 28 de junio
-    { round: "Round of 4", date: "2026-07-14", time: "14:00", team1: "France", team2: "Spain" }, // Partido 73
-    { round: "Round of 4", date: "2026-07-15", time: "14:00", team1: "England", team2: "Argentina" }, // Partido 73
+    { round: "Round of 4", date: "2026-07-18", time: "16:00", team1: "France", team2: "England" }, // Partido 73
+    { round: "Round of 4", date: "2026-07-19", time: "14:00", team1: "Spain", team2: "Argentina" }, // Partido 73
 ];
 
 export default function AdminSeeder() {
